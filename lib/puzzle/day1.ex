@@ -18,14 +18,14 @@ defmodule AoC2025.Puzzle.Day1 do
     |> Enum.count(&(&1 == 0))
   end
 
-  def parseLine(line) do
+  defp parseLine(line) do
     case line do
       <<"L">> <> num -> -String.to_integer(num)
       <<"R">> <> num -> String.to_integer(num)
     end
   end
 
-  def splitStep(n) do
+  defp splitStep(n) do
     case n do
       n when n > 0 -> List.duplicate(1, n)
       n when n < 0 -> List.duplicate(-1, -n)
@@ -33,25 +33,11 @@ defmodule AoC2025.Puzzle.Day1 do
     end
   end
 
-  def normalize(n) do
+  defp normalize(n) do
     Integer.mod(n, 100)
   end
 
-  defmodule Part1 do
-    def id, do: "day1"
-    def name, do: "Day 1: Part 1"
-
-    def solve(input) do
-      AoC2025.Puzzle.Day1.part1(input)
-    end
-  end
-
-  defmodule Part2 do
-    def id, do: "day1"
-    def name, do: "Day 1: Part 2"
-
-    def solve(input) do
-      AoC2025.Puzzle.Day1.part2(input)
-    end
-  end
+  import AoC2025.Runner
+  defrunner(Part1, id: "day1", name: "Day 1 - Part 1", do: part1)
+  defrunner(Part2, id: "day1", name: "Day 1 - Part 2", do: part2)
 end

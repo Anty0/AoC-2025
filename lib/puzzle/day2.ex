@@ -31,7 +31,7 @@ defmodule AoC2025.Puzzle.Day2 do
     |> Enum.sum()
   end
 
-  def parseRanges(input) do
+  defp parseRanges(input) do
     for line <- input,
         range <- String.split(String.trim(line), ","),
         [from, to] = String.split(range, "-", parts: 2) do
@@ -41,21 +41,7 @@ defmodule AoC2025.Puzzle.Day2 do
     end
   end
 
-  defmodule Part1 do
-    def id, do: "day2"
-    def name, do: "Day 2: Part 1"
-
-    def solve(input) do
-      AoC2025.Puzzle.Day2.part1(input)
-    end
-  end
-
-  defmodule Part2 do
-    def id, do: "day2"
-    def name, do: "Day 2: Part 2"
-
-    def solve(input) do
-      AoC2025.Puzzle.Day2.part2(input)
-    end
-  end
+  import AoC2025.Runner
+  defrunner(Part1, id: "day2", name: "Day 2 - Part 1", do: part1)
+  defrunner(Part2, id: "day2", name: "Day 2 - Part 2", do: part2)
 end
