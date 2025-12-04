@@ -13,3 +13,8 @@ runnertest(AoC2025.Puzzle.Day2.Part2, example: 4_174_379_265, orig: 24_774_350_3
 
 runnertest(AoC2025.Puzzle.Day3.Part1, example: 357, orig: 17034)
 runnertest(AoC2025.Puzzle.Day3.Part2, example: 3_121_910_778_619, orig: 168_798_209_663_590)
+
+runnertest(AoC2025.Puzzle.Day4.Part1, example: 13, orig: 1370)
+runnertest(AoC2025.Puzzle.Day4.Part2, example: 43, orig: 8437)
+runnertest(AoC2025.Puzzle.Day4Memo.Part1, example: 13, orig: 1370)
+runnertest(AoC2025.Puzzle.Day4Memo.Part2, example: 43, orig: 8437)
