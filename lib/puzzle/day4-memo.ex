@@ -49,20 +49,18 @@ defmodule AoC2025.Puzzle.Day4Memo do
   end
 
   defp point_at({grid, max_x, max_y}, x, y, 0) do
-    # Memoize.Cache.get_or_run({__MODULE__, :resolve, [max_x, max_y, x, y]}, fn ->
-      cond do
-        x < 0 || y < 0 ->
-          0
+    cond do
+      x < 0 || y < 0 ->
+        0
 
-        x > max_x || y > max_y ->
-          0
+      x > max_x || y > max_y ->
+        0
 
-        true ->
-          grid
-          |> elem(y)
-          |> elem(x)
-      end
-    # end)
+      true ->
+        grid
+        |> elem(y)
+        |> elem(x)
+    end
   end
 
   defp point_at({grid, max_x, max_y}, x, y, n) when n > 3 do
@@ -84,21 +82,19 @@ defmodule AoC2025.Puzzle.Day4Memo do
   end
 
   defp point_at({grid, max_x, max_y}, x, y, n) when n > 0 do
-    # Memoize.Cache.get_or_run({__MODULE__, :resolve, [max_x, max_y, x, y, n]}, fn ->
-      p = fn x, y -> point_at({grid, max_x, max_y}, x, y, n - 1) end
+    p = fn x, y -> point_at({grid, max_x, max_y}, x, y, n - 1) end
 
-      cond do
-        p.(x, y) == 0 ->
-          0
+    cond do
+      p.(x, y) == 0 ->
+        0
 
-        p.(x - 1, y - 1) + p.(x, y - 1) + p.(x + 1, y - 1) + p.(x - 1, y) + p.(x + 1, y) +
-          p.(x - 1, y + 1) + p.(x, y + 1) + p.(x + 1, y + 1) < 4 ->
-          0
+      p.(x - 1, y - 1) + p.(x, y - 1) + p.(x + 1, y - 1) + p.(x - 1, y) + p.(x + 1, y) +
+        p.(x - 1, y + 1) + p.(x, y + 1) + p.(x + 1, y + 1) < 4 ->
+        0
 
-        true ->
-          1
-      end
-    # end)
+      true ->
+        1
+    end
   end
 
   defp parse_line(line) do

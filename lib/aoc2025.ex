@@ -12,11 +12,15 @@ defmodule AoC2025 do
       AoC2025.Puzzle.Day4.Part1,
       AoC2025.Puzzle.Day4.Part2,
       AoC2025.Puzzle.Day4Memo.Part1,
-      AoC2025.Puzzle.Day4Memo.Part2
+      AoC2025.Puzzle.Day4Memo.Part2,
+      AoC2025.Puzzle.Day4MemoV2.Part1,
+      AoC2025.Puzzle.Day4MemoV2.Part2
     ]
   end
 
   def runAll do
+    init()
+
     all_puzzles()
     |> Enum.map(&{&1, run(&1)})
     |> Enum.each(fn {puzzle, results} ->
@@ -45,6 +49,11 @@ defmodule AoC2025 do
     :timer.tc(fn ->
       puzzle.solve(File.stream!(path))
     end)
+  end
+
+  def init() do
+    # This puzzle needs to be initialized from long running thread
+    AoC2025.Puzzle.Day4MemoV2.init()
   end
 
   def main(_args) do
