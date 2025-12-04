@@ -14,13 +14,14 @@ defmodule AoC2025 do
 
   def runAll do
     all_puzzles()
-    |> Stream.map(&run/1)
+    |> Enum.map(&{&1, run(&1)})
     |> Enum.each(fn {puzzle, results} ->
       IO.puts("--- #{puzzle.name()} ---")
 
       results
-      |> Enum.each(fn {path, result} ->
+      |> Enum.each(fn {path, task} ->
         IO.write("#{path}: ")
+        result = Task.await(task, 50_000)
         IO.inspect(result)
       end)
 
@@ -29,11 +30,12 @@ defmodule AoC2025 do
   end
 
   def run(puzzle) do
-    results =
-      AoC2025.Common.inputsFor(puzzle)
-      |> Stream.map(fn path -> {path, puzzle.solve(File.stream!(path))} end)
+    AoC2025.Common.inputsFor(puzzle)
+    |> Enum.map(&{&1, Task.async(AoC2025, :solve, [puzzle, &1])})
+  end
 
-    {puzzle, results}
+  def solve(puzzle, path) do
+    puzzle.solve(File.stream!(path))
   end
 
   def main(_args) do

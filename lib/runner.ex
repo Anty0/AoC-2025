@@ -15,7 +15,7 @@ defmodule AoC2025.Runner do
     Enum.map(opts, fn {suffix, value} ->
       quote do
         defmodule Module.concat([unquote(module), "Test_", unquote(suffix)]) do
-          use ExUnit.Case
+          use ExUnit.Case, async: true
 
           @path Path.join(
                   AoC2025.Constants.input_dir(),
