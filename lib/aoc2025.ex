@@ -52,8 +52,7 @@ defmodule AoC2025 do
   end
 
   def init() do
-    # This puzzle needs to be initialized from long running thread
-    AoC2025.Puzzle.Day4MemoV2.init()
+    :none
   end
 
   def main(_args) do

@@ -1,17 +1,11 @@
 defmodule AoC2025.Puzzle.Day4MemoV2 do
-  @table :grid_store
-
-  def init() do
-    ensure_table!()
-  end
-
   def part1(input) do
-    grid =
+    tid =
       input
       |> Enum.map(&parse_line/1)
       |> prepare_cached_grid()
 
-    Enum.sum(grid_at(grid, 0)) - Enum.sum(grid_at(grid, 1))
+    grid_at(tid, 0) - grid_at(tid, 1)
   end
 
   def part2(input) do
@@ -25,56 +19,57 @@ defmodule AoC2025.Puzzle.Day4MemoV2 do
     max_y = length(grid) - 1
     max_x = length(Enum.at(grid, 0)) - 1
 
-    grid_id = :erlang.unique_integer([:monotonic, :positive])
-    :ets.insert(@table, {grid_id, {max_x, max_y}})
+    tid = create_table!()
+    # grid_id = :erlang.unique_integer([:monotonic, :positive])
+    :ets.insert(tid, {:size, {max_x, max_y}})
 
     grid
     |> Enum.with_index()
     |> Enum.each(fn {row, y} ->
       row
       |> Enum.with_index()
-      |> Enum.each(fn {v, x} -> :ets.insert(@table, {{grid_id, 0, y, x}, v}) end)
+      |> Enum.each(fn {v, x} -> :ets.insert(tid, {{0, y, x}, v}) end)
     end)
 
-    grid_id
+    tid
   end
 
-  defp changes_max(grid) do
+  defp changes_max(tid) do
     [{last, _, _}] =
       Stream.zip([
         Stream.iterate(0, &(&1 + 1)),
-        Stream.iterate(0, &(&1 + 1)) |> Stream.map(&grid_at(grid, &1)) |> Stream.map(&Enum.sum/1),
-        Stream.iterate(1, &(&1 + 1)) |> Stream.map(&grid_at(grid, &1)) |> Stream.map(&Enum.sum/1)
+        Stream.iterate(0, &(&1 + 1)) |> Stream.map(&grid_at(tid, &1)),
+        Stream.iterate(1, &(&1 + 1)) |> Stream.map(&grid_at(tid, &1))
       ])
       |> Stream.filter(fn {_, prev, next} -> prev == next end)
       |> Enum.take(1)
 
-    Enum.sum(grid_at(grid, 0)) - Enum.sum(grid_at(grid, last))
+    grid_at(tid, 0) - grid_at(tid, last)
   end
 
-  defp grid_at(grid_id, n) do
-    case :ets.lookup(@table, {grid_id, n}) do
-      [{{^grid_id, ^n}, result}] ->
+  defp grid_at(tid, n) do
+    case :ets.lookup(tid, n) do
+      [{^n, result}] ->
         result
 
       _ ->
-        [{^grid_id, {max_x, max_y}}] = :ets.lookup(@table, grid_id)
-        r = for y <- 0..max_y, x <- 0..max_x, do: point_at(grid_id, x, y, n)
-        :ets.insert(@table, {{grid_id, n}, r})
+        [{:size, {max_x, max_y}}] = :ets.lookup(tid, :size)
+        r = for(y <- 0..max_y, x <- 0..max_x, do: point_at(tid, x, y, n)) |> Enum.sum()
+        :ets.insert(tid, {n, r})
         r
     end
   end
 
-  defp point_at(grid_id, x, y, n) when n >= 0 do
-    case {:ets.lookup(@table, {grid_id, n, y, x}), n} do
-      {[{{^grid_id, ^n, ^y, ^x}, result}], _} ->
+  defp point_at(tid, x, y, n) when n >= 0 do
+    case {:ets.lookup(tid, {n, y, x}), n} do
+      {[{{^n, ^y, ^x}, result}], _} ->
         result
 
       {_, 0} ->
         0
 
       {_, n} ->
-        c = count_at(grid_id, x, y, n - 1)
+        c = count_at(tid, x, y, n - 1)
 
         r =
           if c < 4 do
@@ -83,13 +78,13 @@ defmodule AoC2025.Puzzle.Day4MemoV2 do
             1
           end
 
-        :ets.insert(@table, {{grid_id, n, y, x}, r})
+        :ets.insert(tid, {{n, y, x}, r})
         r
     end
   end
 
-  defp count_at(grid, x, y, n) do
-    p = fn x, y -> point_at(grid, x, y, n) end
+  defp count_at(tid, x, y, n) do
+    p = fn x, y -> point_at(tid, x, y, n) end
 
     if p.(x, y) == 0 do
       0
@@ -113,26 +108,8 @@ defmodule AoC2025.Puzzle.Day4MemoV2 do
     end
   end
 
-  defp ensure_table! do
-    case :ets.whereis(@table) do
-      :undefined ->
-        try do
-          :ets.new(@table, [
-            :set,
-            :named_table,
-            :public,
-            read_concurrency: true,
-            write_concurrency: true
-          ])
-        rescue
-          ArgumentError ->
-            # Table was created by another process in the meantime
-            :ets.whereis(@table)
-        end
-
-      tid ->
-        tid
-    end
+  defp create_table! do
+    :ets.new(:grid_store, [:set])
   end
 
   import AoC2025.Runner
