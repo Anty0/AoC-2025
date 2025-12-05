@@ -11,6 +11,10 @@ defmodule AoC2025.Common do
       us < 1_000 ->
         IO.ANSI.green_background() <> IO.ANSI.black() <> " #{us} µs " <> IO.ANSI.reset()
 
+      us < 50_000 ->
+        IO.ANSI.green_background() <>
+          IO.ANSI.black() <> " #{Float.round(us / 1_000, 2)} ms " <> IO.ANSI.reset()
+
       us < 1_000_000 ->
         IO.ANSI.yellow_background() <>
           IO.ANSI.black() <> " #{Float.round(us / 1_000, 2)} ms " <> IO.ANSI.reset()
