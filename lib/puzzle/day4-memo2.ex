@@ -1,11 +1,11 @@
 defmodule AoC2025.Puzzle.Day4MemoV2 do
   def part1(input) do
-    tid =
+    grid =
       input
       |> Enum.map(&parse_line/1)
       |> prepare_cached_grid()
 
-    grid_at(tid, 0) - grid_at(tid, 1)
+    grid_at(grid, 0) - grid_at(grid, 1)
   end
 
   def part2(input) do
@@ -19,9 +19,7 @@ defmodule AoC2025.Puzzle.Day4MemoV2 do
     max_y = length(grid) - 1
     max_x = length(Enum.at(grid, 0)) - 1
 
-    tid = create_table!()
-    # grid_id = :erlang.unique_integer([:monotonic, :positive])
-    :ets.insert(tid, {:size, {max_x, max_y}})
+    tid = :ets.new(:grid_store, [:set])
 
     grid
     |> Enum.with_index()
@@ -31,67 +29,77 @@ defmodule AoC2025.Puzzle.Day4MemoV2 do
       |> Enum.each(fn {v, x} -> :ets.insert(tid, {{0, y, x}, v}) end)
     end)
 
-    tid
+    {tid, max_x, max_y}
   end
 
-  defp changes_max(tid) do
+  defp changes_max(grid) do
     [{last, _, _}] =
       Stream.zip([
         Stream.iterate(0, &(&1 + 1)),
-        Stream.iterate(0, &(&1 + 1)) |> Stream.map(&grid_at(tid, &1)),
-        Stream.iterate(1, &(&1 + 1)) |> Stream.map(&grid_at(tid, &1))
+        Stream.iterate(0, &(&1 + 1)) |> Stream.map(&grid_at(grid, &1)),
+        Stream.iterate(1, &(&1 + 1)) |> Stream.map(&grid_at(grid, &1))
       ])
       |> Stream.filter(fn {_, prev, next} -> prev == next end)
       |> Enum.take(1)
 
-    grid_at(tid, 0) - grid_at(tid, last)
+    grid_at(grid, 0) - grid_at(grid, last)
   end
 
-  defp grid_at(tid, n) do
-    case :ets.lookup(tid, n) do
-      [{^n, result}] ->
-        result
-
-      _ ->
-        [{:size, {max_x, max_y}}] = :ets.lookup(tid, :size)
-        r = for(y <- 0..max_y, x <- 0..max_x, do: point_at(tid, x, y, n)) |> Enum.sum()
-        :ets.insert(tid, {n, r})
-        r
-    end
+  defp grid_at({tid, max_x, max_y}, n) do
+    memoized(tid, n, fn ->
+      for(y <- 0..max_y, x <- 0..max_x, do: point_at(tid, max_x, max_y, x, y, n)) |> Enum.sum()
+    end)
   end
 
-  defp point_at(tid, x, y, n) when n >= 0 do
-    case {:ets.lookup(tid, {n, y, x}), n} do
-      {[{{^n, ^y, ^x}, result}], _} ->
-        result
-
-      {_, 0} ->
+  defp point_at(tid, max_x, max_y, x, y, n) when n >= 0 do
+    cond do
+      x < 0 || y < 0 ->
         0
 
-      {_, n} ->
-        c = count_at(tid, x, y, n - 1)
+      x > max_x || y > max_y ->
+        0
 
-        r =
-          if c < 4 do
+      true ->
+        memoized(tid, {n, y, x}, fn ->
+          if point_at(tid, max_x, max_y, x, y, n - 1) == 0 ||
+               count_at(tid, max_x, max_y, x, y, n - 1) < 4 do
             0
           else
             1
           end
-
-        :ets.insert(tid, {{n, y, x}, r})
-        r
+        end)
     end
   end
 
-  defp count_at(tid, x, y, n) do
-    p = fn x, y -> point_at(tid, x, y, n) end
+  defp count_at(tid, max_x, max_y, x, y, n) do
+    sum_neighbors(tid, max_x, max_y, x, y, n, 0, neighbors())
+  end
 
-    if p.(x, y) == 0 do
-      0
-    else
-      p.(x - 1, y - 1) + p.(x, y - 1) + p.(x + 1, y - 1) + p.(x - 1, y) + p.(x + 1, y) +
-        p.(x - 1, y + 1) + p.(x, y + 1) + p.(x + 1, y + 1)
-    end
+  defp neighbors do
+    [
+      {-1, -1},
+      {0, -1},
+      {1, -1},
+      {-1, 0},
+      {1, 0},
+      {-1, 1},
+      {0, 1},
+      {1, 1}
+    ]
+  end
+
+  defp sum_neighbors(_, _, _, _, _, _, sum, _) when sum >= 4 do
+    # When we know there are at least 4, we don't need to count others
+    sum
+  end
+
+  defp sum_neighbors(tid, max_x, max_y, x, y, n, sum, [{dx, dy} | rest]) do
+    sum = sum + point_at(tid, max_x, max_y, x + dx, y + dy, n)
+    sum_neighbors(tid, max_x, max_y, x, y, n, sum, rest)
+  end
+
+  defp sum_neighbors(_, _, _, _, _, _, sum, []) do
+    sum
   end
 
   defp parse_line(line) do
@@ -108,8 +116,16 @@ defmodule AoC2025.Puzzle.Day4MemoV2 do
     end
   end
 
-  defp create_table! do
-    :ets.new(:grid_store, [:set])
+  defp memoized(tid, key, fun) do
+    case :ets.lookup(tid, key) do
+      [{^key, result}] ->
+        result
+
+      _ ->
+        result = fun.()
+        :ets.insert(tid, {key, result})
+        result
+    end
   end
 
   import AoC2025.Runner
