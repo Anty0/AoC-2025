@@ -22,30 +22,39 @@ defmodule AoC2025.Puzzle.Day5 do
     max_v - min_v + 1
   end
 
+  # Crops range such that it won't overlap with any of the ranges in the list
+  # If needed, the range is split into multiple smaller ones
+  @spec crop_range({integer(), integer()}, [{integer(), integer()}]) :: [{integer(), integer()}]
   defp crop_range({min_v, max_v}, [{min_acc, max_acc} | _])
        when min_v >= min_acc and max_v <= max_acc do
+    # Full overlap - the range is already fully included in the list
     []
   end
 
   defp crop_range({min_v, max_v}, [{min_acc, max_acc} | rest])
        when min_v < min_acc and max_v > max_acc do
+    # Inner overlap - split the range into two parts
     Stream.concat(crop_range({min_v, min_acc - 1}, rest), crop_range({max_acc + 1, max_v}, rest))
   end
 
   defp crop_range({min_v, max_v}, [{min_acc, max_acc} | rest])
        when max_v < min_acc or min_v > max_acc do
+    # No overlap - just add the range to the list
     crop_range({min_v, max_v}, rest)
   end
 
   defp crop_range({min_v, max_v}, [{min_acc, _} | rest]) when min_v < min_acc do
+    # Start of the range is before the current range - crop the end of the range
     crop_range({min_v, min(max_v, min_acc - 1)}, rest)
   end
 
   defp crop_range({min_v, max_v}, [{_, max_acc} | rest]) when max_v > max_acc do
+    # End of the range is after the current range - crop the start of the range
     crop_range({max(min_v, max_acc + 1), max_v}, rest)
   end
 
   defp crop_range({min_v, max_v}, []) do
+    # No more ranges to check - just return the original range
     [{min_v, max_v}]
   end
 

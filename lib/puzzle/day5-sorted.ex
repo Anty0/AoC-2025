@@ -3,23 +3,26 @@ defmodule AoC2025.Puzzle.Day5Sorted do
     {ranges, _} = AoC2025.Puzzle.Day5.parse_input(input)
 
     ranges
-    |> Enum.sort_by(fn {min_v, _} -> min_v end)
+    |> Enum.sort_by(fn {min_value, _} -> min_value end)
     |> dedupe_ranges()
     |> Enum.map(&range_size/1)
     |> Enum.sum()
   end
 
-  defp range_size({min_v, max_v}) do
-    max_v - min_v + 1
+  defp range_size({min_value, max_value}) do
+    max_value - min_value + 1
   end
 
-  defp dedupe_ranges([{cx, cy}, {nx, ny} | rest]) do
-    if nx <= cy do
-      y = max(ny, cy)
-      dedupe_ranges([{cx, y} | rest])
-    else
-      [{cx, cy} | dedupe_ranges([{nx, ny} | rest])]
-    end
+  defp dedupe_ranges([{current_min, current_max}, {next_min, next_max} | rest])
+       when next_min <= current_max do
+    # Overlap - extend max and merge the two ranges
+    new_max = max(next_max, current_max)
+    dedupe_ranges([{current_min, new_max} | rest])
+  end
+
+  defp dedupe_ranges([{current_min, current_max}, {next_min, next_max} | rest]) do
+    # No overlap - add current to the result and move on
+    [{current_min, current_max} | dedupe_ranges([{next_min, next_max} | rest])]
   end
 
   defp dedupe_ranges([current]) do
