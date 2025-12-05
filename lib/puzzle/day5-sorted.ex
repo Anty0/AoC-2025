@@ -6,33 +6,31 @@ defmodule AoC2025.Puzzle.Day5Sorted do
 
     ranges
     |> Enum.sort_by(fn {min_value, _} -> min_value end)
-    |> dedupe_ranges()
-    |> Enum.map(&range_size/1)
-    |> Enum.sum()
+    |> sum_ranges()
   end
 
   defp range_size({min_value, max_value}) do
     max_value - min_value + 1
   end
 
-  defp dedupe_ranges([{current_min, current_max}, {next_min, next_max} | rest])
+  defp sum_ranges([{current_min, current_max}, {next_min, next_max} | rest])
        when next_min <= current_max do
     # Overlap - extend max and merge the two ranges
     new_max = max(next_max, current_max)
-    dedupe_ranges([{current_min, new_max} | rest])
+    sum_ranges([{current_min, new_max} | rest])
   end
 
-  defp dedupe_ranges([{current_min, current_max}, {next_min, next_max} | rest]) do
+  defp sum_ranges([{current_min, current_max}, {next_min, next_max} | rest]) do
     # No overlap - add current to the result and move on
-    [{current_min, current_max} | dedupe_ranges([{next_min, next_max} | rest])]
+    range_size({current_min, current_max}) + sum_ranges([{next_min, next_max} | rest])
   end
 
-  defp dedupe_ranges([current]) do
-    [current]
+  defp sum_ranges([current]) do
+    range_size(current)
   end
 
-  defp dedupe_ranges([]) do
-    []
+  defp sum_ranges([]) do
+    0
   end
 
   import AoC2025.Runner
