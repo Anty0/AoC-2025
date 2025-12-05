@@ -1,4 +1,6 @@
 defmodule AoC2025.Puzzle.Day5Sorted do
+  # Inspired by: https://github.com/andesyv/aoc/blob/f646f6e15a258ed7c1e595b37941ce476d1932e6/aoc25/src/fifth.gleam
+
   def part2(input) do
     {ranges, _} = AoC2025.Puzzle.Day5.parse_input(input)
 
