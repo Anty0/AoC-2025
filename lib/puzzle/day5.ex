@@ -61,7 +61,7 @@ defmodule AoC2025.Puzzle.Day5 do
     false
   end
 
-  defp parse_input(input) do
+  def parse_input(input) do
     {ranges, ["" | ids]} =
       input
       |> Enum.map(&String.trim/1)

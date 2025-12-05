@@ -23,3 +23,4 @@ runnertest(AoC2025.Puzzle.Day4MemoV2.Part2, example: 43, orig: 8_437)
 
 runnertest(AoC2025.Puzzle.Day5.Part1, example: 3, orig: 511)
 runnertest(AoC2025.Puzzle.Day5.Part2, example: 14, orig: 350_939_902_751_909)
+runnertest(AoC2025.Puzzle.Day5Sorted.Part2, example: 14, orig: 350_939_902_751_909)
