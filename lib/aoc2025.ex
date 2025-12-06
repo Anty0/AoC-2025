@@ -17,7 +17,9 @@ defmodule AoC2025 do
       AoC2025.Puzzle.Day4MemoV2.Part2,
       AoC2025.Puzzle.Day5.Part1,
       AoC2025.Puzzle.Day5.Part2,
-      AoC2025.Puzzle.Day5Sorted.Part2
+      AoC2025.Puzzle.Day5Sorted.Part2,
+      AoC2025.Puzzle.Day6.Part1,
+      AoC2025.Puzzle.Day6.Part2
     ]
   end
 
