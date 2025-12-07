@@ -53,15 +53,15 @@ defmodule AoC2025.Puzzle.Day4MemoV2 do
 
   defp point_at(tid, max_x, max_y, x, y, n) when n >= 0 do
     cond do
-      x < 0 || y < 0 ->
+      x < 0 or y < 0 ->
         0
 
-      x > max_x || y > max_y ->
+      x > max_x or y > max_y ->
         0
 
       true ->
         memoized(tid, {n, y, x}, fn ->
-          if point_at(tid, max_x, max_y, x, y, n - 1) == 0 ||
+          if point_at(tid, max_x, max_y, x, y, n - 1) == 0 or
                count_at(tid, max_x, max_y, x, y, n - 1) < 4 do
             0
           else

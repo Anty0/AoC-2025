@@ -27,3 +27,6 @@ runnertest(AoC2025.Puzzle.Day5Sorted.Part2, example: 14, orig: 350_939_902_751_9
 
 runnertest(AoC2025.Puzzle.Day6.Part1, example: 4_277_556, orig: 4_309_240_495_780)
 runnertest(AoC2025.Puzzle.Day6.Part2, example: 3_263_827, orig: 9_170_286_552_289)
+
+runnertest(AoC2025.Puzzle.Day7.Part1, example: 21, orig: 1_539)
+runnertest(AoC2025.Puzzle.Day7.Part2, example: 40, orig: 6_479_180_385_864)

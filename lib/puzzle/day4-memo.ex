@@ -50,10 +50,10 @@ defmodule AoC2025.Puzzle.Day4Memo do
 
   defp point_at({grid, max_x, max_y}, x, y, 0) do
     cond do
-      x < 0 || y < 0 ->
+      x < 0 or y < 0 ->
         0
 
-      x > max_x || y > max_y ->
+      x > max_x or y > max_y ->
         0
 
       true ->
