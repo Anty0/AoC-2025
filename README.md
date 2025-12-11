@@ -7,6 +7,10 @@ Weapon of choice: Elixir
 ## Usage
 
 ```bash
+# One of the tests opens a lot of temporary files concurrently
+# Make sure the ulimit is high enough:
+ulimit -n 4096
+
 # Test
 mix test
 # Run

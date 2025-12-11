@@ -129,6 +129,7 @@ defmodule AoC2025.Puzzle.Day4MemoV2 do
   end
 
   import AoC2025.Runner
-  defrunner(Part1, id: "day04", name: "Day 4 (functional with memoization v2) - Part 1", do: part1)
-  defrunner(Part2, id: "day04", name: "Day 4 (functional with memoization v2) - Part 2", do: part2)
+
+  defrunner(Part1, id: "day04", name: "Day 4 (functional+memoization v2) - Part 1", do: part1)
+  defrunner(Part2, id: "day04", name: "Day 4 (functional+memoization v2) - Part 2", do: part2)
 end

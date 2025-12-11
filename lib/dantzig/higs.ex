@@ -31,15 +31,15 @@ defmodule AoC2025.Dantzig.HiGS do
 
           {:error, :enoent} ->
             raise RuntimeError, """
-              Couldn't generate a solution for the given problem.
+            Couldn't generate a solution for the given problem.
 
-              Input problem/model file:
+            Input problem/model file:
 
-              #{indent(iodata, 4)}
-              Output from the HiGHS solver:
+            #{indent(iodata, 4)}
+            Output from the HiGHS solver:
 
-              #{indent(output, 4)}
-              """
+            #{indent(output, 4)}
+            """
         end
 
       Solution.from_file_contents!(solution_contents)
