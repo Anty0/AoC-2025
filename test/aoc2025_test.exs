@@ -40,3 +40,8 @@ runnertest(AoC2025.Puzzle.Day9.Part2, example: 24, orig: 1_603_439_684)
 
 runnertest(AoC2025.Puzzle.Day10.Part1, example: 7, orig: 473)
 runnertest(AoC2025.Puzzle.Day10.Part2, example: 33, orig: 18_681)
+
+runnertest(AoC2025.Puzzle.Day11.Part1P1, example: 5)
+runnertest(AoC2025.Puzzle.Day11.Part1Any, orig: 615)
+runnertest(AoC2025.Puzzle.Day11.Part2P2, example: 2)
+runnertest(AoC2025.Puzzle.Day11.Part2Any, orig: 303_012_373_210_128)

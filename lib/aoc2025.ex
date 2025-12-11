@@ -28,7 +28,11 @@ defmodule AoC2025 do
       AoC2025.Puzzle.Day9.Part1,
       AoC2025.Puzzle.Day9.Part2,
       AoC2025.Puzzle.Day10.Part1,
-      AoC2025.Puzzle.Day10.Part2
+      AoC2025.Puzzle.Day10.Part2,
+      AoC2025.Puzzle.Day11.Part1P1,
+      AoC2025.Puzzle.Day11.Part2P2,
+      AoC2025.Puzzle.Day11.Part1Any,
+      AoC2025.Puzzle.Day11.Part2Any
     ]
   end
 
