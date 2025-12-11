@@ -34,6 +34,11 @@ jobs:
       - name: Install dependencies
         run: mix deps.get
 
+      - name: Install HiGHS solver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y highs
+
       - name: Compile
         run: mix compile
 

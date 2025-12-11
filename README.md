@@ -6,6 +6,8 @@ Weapon of choice: Elixir
 
 ## Usage
 
+Make sure `highs` solver is available in `PATH`.
+
 ```bash
 # One of the tests opens a lot of temporary files concurrently
 # Make sure the ulimit is high enough:
