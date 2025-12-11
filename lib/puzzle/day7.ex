@@ -54,6 +54,6 @@ defmodule AoC2025.Puzzle.Day7 do
   defp parse_header_character(_), do: 0
 
   import AoC2025.Runner
-  defrunner(Part1, id: "day7", name: "Day 7 - Part 1", do: part1)
-  defrunner(Part2, id: "day7", name: "Day 7 - Part 2", do: part2)
+  defrunner(Part1, id: "day07", name: "Day 7 - Part 1", do: part1)
+  defrunner(Part2, id: "day07", name: "Day 7 - Part 2", do: part2)
 end

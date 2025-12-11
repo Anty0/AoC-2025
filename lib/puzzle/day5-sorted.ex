@@ -34,5 +34,5 @@ defmodule AoC2025.Puzzle.Day5Sorted do
   end
 
   import AoC2025.Runner
-  defrunner(Part2, id: "day5", name: "Day 5 (working with sorted ranges) - Part 2", do: part2)
+  defrunner(Part2, id: "day05", name: "Day 5 (working with sorted ranges) - Part 2", do: part2)
 end

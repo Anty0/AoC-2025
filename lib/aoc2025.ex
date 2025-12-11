@@ -11,8 +11,8 @@ defmodule AoC2025 do
       AoC2025.Puzzle.Day3.Part2,
       AoC2025.Puzzle.Day4.Part1,
       AoC2025.Puzzle.Day4.Part2,
-      # AoC2025.Puzzle.Day4Memo.Part1,
-      # AoC2025.Puzzle.Day4Memo.Part2,
+      # AoC2025.Puzzle.Day4Memo.Part1, # Wery slow
+      # AoC2025.Puzzle.Day4Memo.Part2, # Wery slow
       AoC2025.Puzzle.Day4MemoV2.Part1,
       AoC2025.Puzzle.Day4MemoV2.Part2,
       AoC2025.Puzzle.Day5.Part1,
@@ -26,7 +26,9 @@ defmodule AoC2025 do
       AoC2025.Puzzle.Day8.Part1x1000,
       AoC2025.Puzzle.Day8.Part2,
       AoC2025.Puzzle.Day9.Part1,
-      AoC2025.Puzzle.Day9.Part2
+      AoC2025.Puzzle.Day9.Part2,
+      AoC2025.Puzzle.Day10.Part1,
+      AoC2025.Puzzle.Day10.Part2
     ]
   end
 
@@ -41,7 +43,7 @@ defmodule AoC2025 do
       results
       |> Enum.each(fn {path, task} ->
         IO.write("#{path}: ")
-        {time_us, result} = Task.await(task, 50_000)
+        {time_us, result} = Task.await(task, :infinity)
         IO.write(IO.ANSI.bright() <> inspect(result) <> IO.ANSI.reset())
         IO.write(" in ")
         IO.puts(AoC2025.Common.pretty_time(time_us))

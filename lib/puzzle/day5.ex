@@ -89,6 +89,6 @@ defmodule AoC2025.Puzzle.Day5 do
   end
 
   import AoC2025.Runner
-  defrunner(Part1, id: "day5", name: "Day 5 - Part 1", do: part1)
-  defrunner(Part2, id: "day5", name: "Day 5 - Part 2", do: part2)
+  defrunner(Part1, id: "day05", name: "Day 5 - Part 1", do: part1)
+  defrunner(Part2, id: "day05", name: "Day 5 - Part 2", do: part2)
 end

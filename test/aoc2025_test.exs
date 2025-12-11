@@ -37,3 +37,6 @@ runnertest(AoC2025.Puzzle.Day8.Part2, "10x.example": 25272, "1000x.orig": 51_294
 
 runnertest(AoC2025.Puzzle.Day9.Part1, example: 50, orig: 4_759_420_470)
 runnertest(AoC2025.Puzzle.Day9.Part2, example: 24, orig: 1_603_439_684)
+
+runnertest(AoC2025.Puzzle.Day10.Part1, example: 7, orig: 473)
+runnertest(AoC2025.Puzzle.Day10.Part2, example: 33, orig: 18_681)

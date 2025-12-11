@@ -27,3 +27,6 @@ aoc2025-*.tar
 
 # Built binary
 /aoc2025
+
+# HiGHS linear algebra solver
+/HiGHS.log
