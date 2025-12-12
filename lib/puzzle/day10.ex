@@ -21,6 +21,7 @@ defmodule AoC2025.Puzzle.Day10 do
   require Dantzig.Problem, as: Problem
   require Dantzig.Constraint, as: Constraint
 
+  alias AoC2025.Common
   alias AoC2025.Puzzle.Day10.Machine
 
   def part1(input) do
@@ -104,7 +105,7 @@ defmodule AoC2025.Puzzle.Day10 do
 
   defp solve_machine_lights(machine) do
     # Iterative DFS search of shortest combinations
-    Stream.iterate(0, &(&1 + 1))
+    Common.index()
     |> Stream.map(fn limit ->
       {
         limit,

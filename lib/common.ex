@@ -24,4 +24,40 @@ defmodule AoC2025.Common do
           IO.ANSI.white() <> " #{Float.round(us / 1_000_000, 2)} s " <> IO.ANSI.reset()
     end
   end
+
+  def infinite(list, value) do
+    Stream.concat(
+      list,
+      Stream.repeatedly(fn -> value end)
+    )
+  end
+
+  def index(start \\ 0, step \\ 1) do
+    Stream.iterate(start, &(&1 + step))
+  end
+
+  def memoized(tid, key, fun) do
+    case :ets.lookup(tid, key) do
+      [{^key, result}] ->
+        result
+
+      _ ->
+        result = fun.()
+        :ets.insert(tid, {key, result})
+        result
+    end
+  end
+
+  def with_table(name, fun) do
+    tid = :ets.new(name, [:set])
+    result = fun.(tid)
+    :ets.delete(tid)
+    result
+  end
+
+  def enum_map2d(list, fun) do
+    list |> Enum.map(&Enum.map(&1, fun))
+  end
+
+  def identity(x), do: x
 end

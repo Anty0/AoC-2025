@@ -1,4 +1,6 @@
 defmodule AoC2025.Puzzle.Day4MemoV2 do
+  alias AoC2025.Common
+
   def part1(input) do
     grid =
       input
@@ -35,9 +37,9 @@ defmodule AoC2025.Puzzle.Day4MemoV2 do
   defp changes_max(grid) do
     [{last, _, _}] =
       Stream.zip([
-        Stream.iterate(0, &(&1 + 1)),
-        Stream.iterate(0, &(&1 + 1)) |> Stream.map(&grid_at(grid, &1)),
-        Stream.iterate(1, &(&1 + 1)) |> Stream.map(&grid_at(grid, &1))
+        Common.index(),
+        Common.index() |> Stream.map(&grid_at(grid, &1)),
+        Common.index(1) |> Stream.map(&grid_at(grid, &1))
       ])
       |> Stream.filter(fn {_, prev, next} -> prev == next end)
       |> Enum.take(1)
@@ -46,7 +48,7 @@ defmodule AoC2025.Puzzle.Day4MemoV2 do
   end
 
   defp grid_at({tid, max_x, max_y}, n) do
-    memoized(tid, n, fn ->
+    Common.memoized(tid, n, fn ->
       for(y <- 0..max_y, x <- 0..max_x, do: point_at(tid, max_x, max_y, x, y, n)) |> Enum.sum()
     end)
   end
@@ -60,7 +62,7 @@ defmodule AoC2025.Puzzle.Day4MemoV2 do
         0
 
       true ->
-        memoized(tid, {n, y, x}, fn ->
+        Common.memoized(tid, {n, y, x}, fn ->
           if point_at(tid, max_x, max_y, x, y, n - 1) == 0 or
                count_at(tid, max_x, max_y, x, y, n - 1) < 4 do
             0
@@ -113,18 +115,6 @@ defmodule AoC2025.Puzzle.Day4MemoV2 do
     case ch do
       ?@ -> 1
       ?. -> 0
-    end
-  end
-
-  defp memoized(tid, key, fun) do
-    case :ets.lookup(tid, key) do
-      [{^key, result}] ->
-        result
-
-      _ ->
-        result = fun.()
-        :ets.insert(tid, {key, result})
-        result
     end
   end
 

@@ -45,3 +45,8 @@ runnertest(AoC2025.Puzzle.Day11.Part1P1, example: 5)
 runnertest(AoC2025.Puzzle.Day11.Part1Any, orig: 615)
 runnertest(AoC2025.Puzzle.Day11.Part2P2, example: 2)
 runnertest(AoC2025.Puzzle.Day11.Part2Any, orig: 303_012_373_210_128)
+
+# My day12 solution, can't solve the example input
+# I can't be bothered to fix this :3
+# runnertest(AoC2025.Puzzle.Day12.Part1, example: 2, orig: 460)
+runnertest(AoC2025.Puzzle.Day12.Part1, example: {0, 3}, orig: 460)

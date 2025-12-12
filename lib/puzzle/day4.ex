@@ -1,4 +1,6 @@
 defmodule AoC2025.Puzzle.Day4 do
+  alias AoC2025.Common
+
   def part1(input) do
     input
     |> Enum.map(&parse_line/1)
@@ -50,34 +52,27 @@ defmodule AoC2025.Puzzle.Day4 do
 
   defp zip_neighbors(grid) do
     Enum.zip([
-      Stream.iterate(0, &(&1 + 1)),
+      Common.index(),
       grid,
-      [[] | grid] |> infinite([]),
-      grid |> Stream.drop(1) |> infinite([])
+      [[] | grid] |> Common.infinite([]),
+      grid |> Stream.drop(1) |> Common.infinite([])
     ])
     |> Enum.flat_map(fn {index_y, real, above, bellow} ->
       Enum.zip([
-        Stream.iterate(0, &(&1 + 1)),
+        Common.index(),
         Stream.repeatedly(fn -> index_y end),
         real,
-        [0 | above] |> infinite(0),
-        above |> infinite(0),
-        above |> Stream.drop(1) |> infinite(0),
-        [0 | bellow] |> infinite(0),
-        bellow |> infinite(0),
-        bellow |> Stream.drop(1) |> infinite(0),
-        [0 | real] |> infinite(0),
-        real |> Stream.drop(1) |> infinite(0)
+        [0 | above] |> Common.infinite(0),
+        above |> Common.infinite(0),
+        above |> Stream.drop(1) |> Common.infinite(0),
+        [0 | bellow] |> Common.infinite(0),
+        bellow |> Common.infinite(0),
+        bellow |> Stream.drop(1) |> Common.infinite(0),
+        [0 | real] |> Common.infinite(0),
+        real |> Stream.drop(1) |> Common.infinite(0)
       ])
       |> Enum.map(&Tuple.to_list/1)
     end)
-  end
-
-  defp infinite(list, value) do
-    Stream.concat(
-      list,
-      Stream.repeatedly(fn -> value end)
-    )
   end
 
   defp parse_line(line) do

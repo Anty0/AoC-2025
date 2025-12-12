@@ -1,4 +1,5 @@
 defmodule AoC2025.Puzzle.Day4Memo do
+  alias AoC2025.Common
   use Memoize
 
   def part1(input) do
@@ -32,9 +33,9 @@ defmodule AoC2025.Puzzle.Day4Memo do
   defp changes_max(grid) do
     [{last, _, _}] =
       Stream.zip([
-        Stream.iterate(0, &(&1 + 1)),
-        Stream.iterate(0, &(&1 + 1)) |> Stream.map(&grid_at(grid, &1)) |> Stream.map(&Enum.sum/1),
-        Stream.iterate(1, &(&1 + 1)) |> Stream.map(&grid_at(grid, &1)) |> Stream.map(&Enum.sum/1)
+        Common.index(),
+        Common.index() |> Stream.map(&grid_at(grid, &1)) |> Stream.map(&Enum.sum/1),
+        Common.index(1) |> Stream.map(&grid_at(grid, &1)) |> Stream.map(&Enum.sum/1)
       ])
       |> Stream.filter(fn {_, prev, next} -> prev == next end)
       |> Enum.take(1)

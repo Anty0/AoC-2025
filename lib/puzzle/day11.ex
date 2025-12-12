@@ -1,4 +1,6 @@
 defmodule AoC2025.Puzzle.Day11 do
+  alias AoC2025.Common
+
   def part1(input) do
     input
     |> Enum.map(&parse_line/1)
@@ -29,10 +31,9 @@ defmodule AoC2025.Puzzle.Day11 do
   end
 
   defp all_paths(map, from, targets, blocked \\ []) do
-    tid = :ets.new(:grid_store, [:set])
-    result = path_to(tid, map, from, targets, blocked)
-    :ets.delete(tid)
-    result
+    Common.with_table(:memo, fn tid ->
+      path_to(tid, map, from, targets, blocked)
+    end)
   end
 
   defp path_to(tid, map, current, targets, blocked) do
@@ -47,7 +48,7 @@ defmodule AoC2025.Puzzle.Day11 do
         0
 
       true ->
-        memoized(tid, current, fn ->
+        Common.memoized(tid, current, fn ->
           case map do
             %{^current => neighbors} ->
               Enum.sum_by(neighbors, &path_to(tid, map, &1, targets, blocked))
@@ -56,18 +57,6 @@ defmodule AoC2025.Puzzle.Day11 do
               0
           end
         end)
-    end
-  end
-
-  defp memoized(tid, key, fun) do
-    case :ets.lookup(tid, key) do
-      [{^key, result}] ->
-        result
-
-      _ ->
-        result = fun.()
-        :ets.insert(tid, {key, result})
-        result
     end
   end
 
